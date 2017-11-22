@@ -12,7 +12,7 @@ import UIKit
 
 class BaseViewController: UIViewController
 {
-  
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -41,9 +41,14 @@ class BaseViewController: UIViewController
     /*
      * Keyboard shown
      */
-    @objc func keyboardWillAppear()
+    @objc func keyboardWillAppear(notification: NSNotification)
     {
-        keyBoardStateChanged(keyBoardDisplayed: true, height: 0)
+        //Need to calculate keyboard exact size due to Apple suggestions
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        keyBoardStateChanged(keyBoardDisplayed: true, height: keyboardHeight)
     }
     
     /*
@@ -57,8 +62,7 @@ class BaseViewController: UIViewController
     /*
      * This method will be overriden by subclass when needed
      */
-    func keyBoardStateChanged(keyBoardDisplayed:Bool,height:Float){}
-    
+    func keyBoardStateChanged(keyBoardDisplayed:Bool,height:CGFloat){}
     
 }
 
